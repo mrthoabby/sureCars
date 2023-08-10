@@ -10,11 +10,8 @@ namespace sureApp.domain.Entities
 {
     internal class Car : IVehicle
     {
-        [Required]
         public string Plate { get ; set ; }
-        [Required]
         public string Model { get ; set ; }
-        [Required]
         public bool IsItInspected { get ; set ; }
         Type IVehicle.GetType() => typeof(Car);
     }
