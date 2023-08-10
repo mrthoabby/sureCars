@@ -1,8 +1,13 @@
-﻿namespace sureApp.domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace sureApp.domain.Entities.DTO
 {
-    public class Customer
+    internal class CustomerDTO
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
         public string HomeTown { get; set; }

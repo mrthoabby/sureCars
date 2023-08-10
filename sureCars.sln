@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sureCars", "sureCars\sureCa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sureApp.domain", "sureApp.domain\sureApp.domain.csproj", "{C070250A-38E4-4846-AFB3-FA8FA1E6DB16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sureApp.Application", "sureApp.Application\sureApp.Application.csproj", "{38C66B01-4F6F-4AC8-8ED8-A6E5C858581C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sureApp.Data", "sureApp.Data\sureApp.Data.csproj", "{ADCDE594-3DD0-472B-BD14-20920BED6ED0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C070250A-38E4-4846-AFB3-FA8FA1E6DB16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C070250A-38E4-4846-AFB3-FA8FA1E6DB16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C070250A-38E4-4846-AFB3-FA8FA1E6DB16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C66B01-4F6F-4AC8-8ED8-A6E5C858581C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C66B01-4F6F-4AC8-8ED8-A6E5C858581C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C66B01-4F6F-4AC8-8ED8-A6E5C858581C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C66B01-4F6F-4AC8-8ED8-A6E5C858581C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADCDE594-3DD0-472B-BD14-20920BED6ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCDE594-3DD0-472B-BD14-20920BED6ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCDE594-3DD0-472B-BD14-20920BED6ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCDE594-3DD0-472B-BD14-20920BED6ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
