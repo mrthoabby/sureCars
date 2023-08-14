@@ -5,29 +5,30 @@ namespace Infrastructure.Helpers
 {
     internal class Configurator
     {
-        private static readonly List<ICommand> objects = new List<ICommand>();
+        private static readonly Queue<ICommand> objectsToMap = new Queue<ICommand>();
+        private static readonly Queue<ICommand> objectsToInitialice = new Queue<ICommand>();
 
         public static void AddObject(ICommand obj)
         {
-            objects.Add(obj);
+            objectsToMap.Enqueue(obj);
+            objectsToInitialice.Enqueue(obj);
         }
-        public static void AddObjects(ICommand[] objs)
+        public static async void ExecuteMapping()
         {
-            objects.AddRange(objs);
-        }
-
-        public static void ExecuteMapping()
-        {
-            objects.ForEach(obj => obj.ToMap() );
-        }
-
-        public static async Task ExecutePreInitializator(ApplicationDbContext context)
-        {
-            var tasks = objects.Select(async obj =>
+            while (objectsToMap.Count > 0)
             {
-                await obj.PreInitializator(context);
-            }).ToArray();
-            await Task.WhenAll(tasks);
+                var element = objectsToMap.Dequeue();
+                element.ToMap();
+            }
+        }
+
+        public static async Task ExecutePreInitializator(ApplicationDbContext context, CreateAutoincrementalEntitys counter)
+        {
+            while (objectsToInitialice.Count > 0)
+            {
+                var element = objectsToInitialice.Dequeue();
+               await element.PreInitializator(context, counter);
+            }
         }
     }
 }
