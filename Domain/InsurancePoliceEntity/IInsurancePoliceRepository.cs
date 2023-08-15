@@ -2,7 +2,7 @@
 
 namespace Domain.InsurancePolicyEntity
 {
-    public interface IInsurancePolicyRepository : ICreateAsync<InsurancePolicy>, IGetAllAsync<InsurancePolicy>,IGetByIdAsync<InsurancePolicy,long>
+    public interface IInsurancePolicyRepository : ICreateAsync<InsurancePolicy>, IGetAllAsync<InsurancePolicy>,IGetByIdAsync<InsurancePolicy,string>
     {
     }
 }

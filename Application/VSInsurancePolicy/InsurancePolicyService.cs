@@ -20,7 +20,12 @@ namespace Application.VSInsurancePolicy
             return await _coverageRepository.GetAllAsync();
         }
 
-        public async Task<InsurancePolicy> GetByIdAsync(long id)
+        public Task<InsurancePolicy> GetByCustomDataSearcher(string data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<InsurancePolicy> GetByIdAsync(string id)
         {
             return await _coverageRepository.GetByIdAsync(id);
         }

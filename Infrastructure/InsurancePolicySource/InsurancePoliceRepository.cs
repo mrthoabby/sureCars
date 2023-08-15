@@ -25,10 +25,10 @@ namespace sureApp.Infrastructure.InsurancePolicySource
             return _collection.AsQueryable();
         }
 
-        public async Task<InsurancePolicy> GetByIdAsync(long id)
+        public async Task<InsurancePolicy> GetByIdAsync(string id)
         {
             var data = _collection.AsQueryable();
-            return await data.FirstOrDefaultAsync(x => x.Id == id);
+            return await data.FirstOrDefaultAsync(x => x.Identifier == id);
         }
     }
 }

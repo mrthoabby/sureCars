@@ -6,6 +6,9 @@ using sureApp.domain.ValueObjects;
 using sureApp.Infrastructure;
 using sureApp.Infrastructure.InsurancePolicySource;
 using Domain.InsurancePolicyEntity;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson;
 
 namespace Infrastructure.InsurancePolicySource
 {
@@ -14,7 +17,7 @@ namespace Infrastructure.InsurancePolicySource
     {
         public async Task PreInitializator(ApplicationDbContext context, CreateAutoincrementalEntitys counter)
         {
-            var insuranceFeatures = new List<int>();
+            //var insuranceFeatures = new List<int>();
 
             var repo = new CoverageFeatureRepository(context, counter); 
             var coverageRepo = new InsurancePolicyRepository(context, counter);
@@ -31,40 +34,34 @@ namespace Infrastructure.InsurancePolicySource
                 "Tranquilidad TotalCare",
                 "Respaldo SeguroLife"
             };
-            var tasks = Enumerable.Range(0, 5).Select(incrementator =>
+            for(int incrementator = 0; incrementator < suresPolicys.Count; incrementator++)
             {
-                return Task.Run(async () =>
-
+                var insuranceFeatures = new List<int>();
+                foreach (var coverage in coverages)
                 {
-                    List<int> insuranceFeatures = new List<int>();
-                    foreach (var coverage in coverages)
+                    if (new Random().Next(1, 11) % 2 == 0)
                     {
-                        if (new Random().Next(1, 11) % 2 == 0)
-                        {
-                            insuranceFeatures.Add(coverage.Id);
-                        }
-
+                        insuranceFeatures.Add(coverage.Id);
                     }
+                }
+                var entity = new InsurancePolicy
+                {
+                    FeaturesId = insuranceFeatures,
+                    MaximunCoverageValue = new Random().Next(1000000, 30000000),
+                    Name = suresPolicys[incrementator],
+                    Validity = new DateRange(DateTime.Now, DateTime.Now.AddMinutes(new Random().Next(1, 3)))
+                };
 
-                    var entity = new InsurancePolicy
-                    {
-                        FeaturesId = insuranceFeatures,
-                        MaximunCoverageValue = new Random().Next(1000000, 30000000),
-                        Name = suresPolicys[incrementator],
-                        Validity = new DateRange(DateTime.Now, DateTime.Now.AddMinutes(new Random().Next(1, 3)))
-                    };
-
-                    await coverageRepo.CreateAsync(entity);
-                });
-            }).ToArray();
-            await Task.WhenAll(tasks);
+                await coverageRepo.CreateAsync(entity);
+            }
         }
 
         public void ToMap()
         {
             BsonClassMap.RegisterClassMap<InsurancePolicy>(classMap =>
             {
-                classMap.MapIdMember(x => x.Id);
+                classMap.MapIdMember(x => x.Identifier).SetIdGenerator(StringObjectIdGenerator.Instance)
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
                 classMap.AutoMap();
             });
         }
