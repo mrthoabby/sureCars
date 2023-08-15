@@ -1,6 +1,9 @@
 using sureApp.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
-await builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddInfrastructure(builder.Configuration);
+//Esto solo corre en un ambiente de desarrollo
+await builder.Services.AddInfraestructureInDevMode(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

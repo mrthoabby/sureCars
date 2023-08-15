@@ -1,12 +1,18 @@
 ﻿
-using Application.VSCoverage;
+using Application.VSInsurancePolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using sureApp.Infrastructure.CoverageSource;
-using sureApp.domain.CoverageEntity;
+using sureApp.Infrastructure.InsurancePolicySource;
 using Infrastructure.Helpers;
-using Infrastructure.CoverageSource;
 using Infrastructure.CoverageFeatureSource;
+using Domain.InsurancePolicyEntity;
+using Infrastructure.InsurancePolicySource;
+using sureApp.Application.VSCustomer;
+using Application.VSContract;
+using sureApp.domain.CustomerEntity;
+using Infrastructure.CustomerSource;
+using Infrastructure.ContractSource;
+using Domain.ContractEntity;
 
 namespace sureApp.Infrastructure
 {
@@ -31,8 +37,11 @@ namespace sureApp.Infrastructure
             public static IServiceCollection AddInfrastructure(this
             IServiceCollection services, IConfiguration configuration)
         {
+            Configurator.Init();
             Configurator.AddObject(new CoverageFeatureConfig());
-            Configurator.AddObject(new CoverageConfigs());
+            Configurator.AddObject(new InsurancePolicyConfig());
+            Configurator.AddObject(new CostumerConfig());
+            Configurator.AddObject(new ContractConfig());
             Configurator.ExecuteMapping();
 
             var connectionString = configuration.GetConnectionString("MongoDbConnectionString");
@@ -45,8 +54,14 @@ namespace sureApp.Infrastructure
             dbContext = new ApplicationDbContext(connectionString, databaseName);
             _ = services.AddScoped(
                   provider => dbContext);
-            services.AddScoped<ICoverageRepository, CoverageRepository>();
-            services.AddScoped<ICoverageServices, CoverageServices>();
+            services.AddScoped<IInsurancePolicyRepository, InsurancePolicyRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
+
+
+            services.AddScoped<IInsurancePolicyService, InsurancePolicyService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IContractService, ContractService>();
 
             autoIndexDb = new CreateAutoincrementalEntitys(dbContext);
             services.AddSingleton(provider => autoIndexDb);
