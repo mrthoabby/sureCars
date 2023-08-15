@@ -2,7 +2,7 @@
 
 namespace sureApp.domain.CustomerEntity
 {
-    public interface ICustomerRepository:ICreateAsync<Customer>,IGetAllAsync<Customer>
+    public interface ICustomerRepository:ICreateAsync<Customer>,IGetAllAsync<Customer>,IGetByIdAsync<Customer,string>
     {
 
     }
