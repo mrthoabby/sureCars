@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Interfaces;
+using MongoDB.Bson;
 using sureApp.Infrastructure;
 
 namespace Infrastructure.Helpers
@@ -8,12 +9,17 @@ namespace Infrastructure.Helpers
         private static readonly Queue<ICommand> objectsToMap = new Queue<ICommand>();
         private static readonly Queue<ICommand> objectsToInitialice = new Queue<ICommand>();
 
+
+        public static void Init()
+        {
+            //BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+        }
         public static void AddObject(ICommand obj)
         {
             objectsToMap.Enqueue(obj);
             objectsToInitialice.Enqueue(obj);
         }
-        public static async void ExecuteMapping()
+        public static void ExecuteMapping()
         {
             while (objectsToMap.Count > 0)
             {
