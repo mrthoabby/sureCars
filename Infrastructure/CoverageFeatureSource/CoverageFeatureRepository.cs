@@ -1,6 +1,7 @@
 ﻿using Domain.CoverageFeatureEntity;
 using Infrastructure.Helpers;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using sureApp.domain.CoverageFeatureEntity;
 using sureApp.Infrastructure;
 
@@ -23,6 +24,12 @@ namespace Infrastructure.CoverageFeatureSource
         public async Task<IQueryable<CoverageFeature>> GetAllAsync()
         {
             return _collection.AsQueryable();
+        }
+
+        public async Task<CoverageFeature> GetByIdAsync(long id)
+        {
+            var data = _collection.AsQueryable();
+            return await data.FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }
