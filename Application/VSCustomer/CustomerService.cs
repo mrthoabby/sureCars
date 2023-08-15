@@ -11,9 +11,14 @@ namespace sureApp.Application.VSCustomer
             _repository = repository;
         }
 
-        public Task<Customer> CreateAsync(Customer entity)
+        public async Task<Customer> CreateAsync(Customer entity)
         {
-            return _repository.CreateAsync(entity);
+            return await _repository.CreateAsync(entity);
+        }
+
+        public async Task<IQueryable<Customer>> GetAllAsync()
+        {
+            return await _repository.GetAllAsync();
         }
     }
 }

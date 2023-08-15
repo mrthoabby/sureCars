@@ -22,5 +22,10 @@ namespace Infrastructure.CustomerSource
             };
             return await _collection.FindOneAndUpdateAsync(filter, update, options);
         }
+
+        public async Task<IQueryable<Customer>> GetAllAsync()
+        {
+            return _collection.AsQueryable();
+        }
     }
 }
