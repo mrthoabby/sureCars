@@ -21,20 +21,14 @@ namespace Infrastructure.Helpers
                 IsUpsert = true,
                 ReturnDocument = ReturnDocument.After
             };
-            try
+            var currentId = await _counter.FindOneAndUpdateAsync(filter, update, options);
+            PropertyInfo idProperty = typeof(Entity).GetProperty("Id");
+            if (idProperty != null && currentId != null)
             {
-                var currentId = await _counter.FindOneAndUpdateAsync(filter, update, options);
-                PropertyInfo idProperty = typeof(Entity).GetProperty("Id");
-                if (idProperty != null && currentId != null)
-                {
-                    idProperty.SetValue(entity, currentId.currentCounterValue);
-                }
-                await _collection.InsertOneAsync(entity);
+                idProperty.SetValue(entity, currentId.currentCounterValue);
             }
-            catch (Exception ex)
-            {
-                //Por ahora no manejaré las execiones por cuestion de tiempo
-            }
+            await _collection.InsertOneAsync(entity);
+            
             return entity;
         }
     }
