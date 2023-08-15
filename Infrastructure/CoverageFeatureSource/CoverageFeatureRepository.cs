@@ -26,7 +26,7 @@ namespace Infrastructure.CoverageFeatureSource
             return _collection.AsQueryable();
         }
 
-        public async Task<CoverageFeature> GetByIdAsync(long id)
+        public async Task<CoverageFeature> GetByIdAsync(int id)
         {
             var data = _collection.AsQueryable();
             return await data.FirstOrDefaultAsync(x => x.Id == id);

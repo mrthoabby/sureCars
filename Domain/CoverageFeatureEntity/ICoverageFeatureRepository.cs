@@ -3,7 +3,7 @@ using sureApp.domain.Interfaces.Behaviors;
 
 namespace Domain.CoverageFeatureEntity
 {
-    public interface ICoverageFeatureRepository:ICreateAsync<CoverageFeature>, IGetAllAsync<CoverageFeature>,IGetByIdAsync<CoverageFeature,long>
+    public interface ICoverageFeatureRepository:ICreateAsync<CoverageFeature>, IGetAllAsync<CoverageFeature>,IGetByIdAsync<CoverageFeature,int>
     {
     }
 }
