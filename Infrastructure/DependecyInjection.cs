@@ -8,11 +8,11 @@ using Infrastructure.CoverageFeatureSource;
 using Domain.InsurancePolicyEntity;
 using Infrastructure.InsurancePolicySource;
 using sureApp.Application.VSCustomer;
-using Application.VSContract;
+using Application.VSContractInsurancePolicy;
 using sureApp.domain.CustomerEntity;
 using Infrastructure.CustomerSource;
-using Infrastructure.ContractSource;
-using Domain.ContractEntity;
+using Infrastructure.ContractInsurancePolicySource;
+using Domain.ContractInsurancePolicyEntity;
 
 namespace sureApp.Infrastructure
 {
@@ -41,7 +41,7 @@ namespace sureApp.Infrastructure
             Configurator.AddObject(new CoverageFeatureConfig());
             Configurator.AddObject(new InsurancePolicyConfig());
             Configurator.AddObject(new CostumerConfig());
-            Configurator.AddObject(new ContractConfig());
+            Configurator.AddObject(new ContractInsurancePolicyConfig());
             Configurator.ExecuteMapping();
 
             var connectionString = configuration.GetConnectionString("MongoDbConnectionString");
@@ -56,12 +56,12 @@ namespace sureApp.Infrastructure
                   provider => dbContext);
             services.AddScoped<IInsurancePolicyRepository, InsurancePolicyRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IContractInsurancePolicyRepository, ContractInsurancePolicyRepository>();
 
 
             services.AddScoped<IInsurancePolicyService, InsurancePolicyService>();
             services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IContractService, ContractService>();
+            services.AddScoped<IContractInsurancePolicyService, ContractInsurancePolicyService>();
 
             autoIndexDb = new CreateAutoincrementalEntitys(dbContext);
             services.AddSingleton(provider => autoIndexDb);

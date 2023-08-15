@@ -4,7 +4,6 @@ using sureApp.domain.CoverageFeatureEntity;
 using Domain.InsurancePolicyEntity;
 using sureApp.domain.CustomerEntity;
 using Domain.ContractEntity;
-using MongoDB.Bson;
 
 namespace sureApp.Infrastructure
 {
@@ -13,7 +12,7 @@ namespace sureApp.Infrastructure
         public IMongoCollection<InsurancePolicy> Coverages { get; private init; }
         public IMongoCollection<CoverageFeature> CoverageFeatures { get; private init; }
         public IMongoCollection<Customer> Customers { get; private init; }
-        public IMongoCollection<Contract> Contracts { get; private init; }
+        public IMongoCollection<ContractInsurancePolicy> Contracts { get; private init; }
         public IMongoCollection<CounterAutoIncremental> Counters { get; private init; }
         
 
@@ -26,7 +25,7 @@ namespace sureApp.Infrastructure
             Counters = database.GetCollection<CounterAutoIncremental>(nameof(CounterAutoIncremental));
             CoverageFeatures = database.GetCollection<CoverageFeature>(nameof(CoverageFeature));
             Customers = database.GetCollection<Customer>(nameof(Customer));
-            Contracts = database.GetCollection<Contract>(nameof(Contract));
+            Contracts = database.GetCollection<ContractInsurancePolicy>(nameof(ContractInsurancePolicy));
         }
     }
 }
