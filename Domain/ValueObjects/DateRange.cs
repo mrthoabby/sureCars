@@ -1,9 +1,6 @@
-﻿using sureApp.domain.Interfaces;
-
-namespace sureApp.domain.ValueObjects
+﻿namespace sureApp.domain.ValueObjects
 {
-    public record DateRange(DateTime From, DateTime To) : IValidator
+    public record DateRange(DateTime From, DateTime To) 
     {
-        public bool IsValid() => From < To;
     }
 }

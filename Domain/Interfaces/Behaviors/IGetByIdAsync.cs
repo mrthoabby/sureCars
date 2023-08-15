@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sureApp.domain.Interfaces.Behaviors
 {
-    internal interface IGetByIdAsync<Entity, EntityIdentifier> where Entity : class
+    public interface IGetByIdAsync<Entity, EntityIdentifier> where Entity : class
     {
         Task<Entity> GetByIdAsync(EntityIdentifier id);
     }
