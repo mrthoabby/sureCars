@@ -17,7 +17,8 @@ namespace Infrastructure.ContractInsurancePolicySource
         {
             BsonClassMap.RegisterClassMap<ContractInsurancePolicy>(classMap =>
             {
-                classMap.MapIdMember(x => x.PolicyContractNumber);
+                
+                classMap.MapIdMember(x => x.Id);
                 classMap.AutoMap();
             });
         }

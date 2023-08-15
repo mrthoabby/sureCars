@@ -1,28 +1,23 @@
 ﻿using Domain.ContractInsurancePolicyEntity;
+using Infrastructure.Helpers;
 using MongoDB.Driver;
 using sureApp.Infrastructure;
 
 namespace Infrastructure.ContractInsurancePolicySource
 {
-    internal class ContractInsurancePolicyRepository : Domain.ContractInsurancePolicyEntity.IContractInsurancePolicyRepository
+    internal class ContractInsurancePolicyRepository :IContractInsurancePolicyRepository
     {
         private readonly IMongoCollection<ContractInsurancePolicy> _collection;
-        public ContractInsurancePolicyRepository(ApplicationDbContext context)
+        private readonly CreateAutoincrementalEntitys _autoIncrementer;
+        public ContractInsurancePolicyRepository(ApplicationDbContext context, CreateAutoincrementalEntitys autoIncrementer)
         {
             _collection = context.Contracts;
+            _autoIncrementer = autoIncrementer;
         }
         public async Task<ContractInsurancePolicy> CreateAsync(ContractInsurancePolicy entity)
         {
-            var filter = Builders<ContractInsurancePolicy>.Filter.Empty;
-            var update = Builders<ContractInsurancePolicy>.Update.CurrentDate(x => x.CreateAt);
-            var options = new FindOneAndUpdateOptions<ContractInsurancePolicy>
-            {
-                IsUpsert = true,
-                ReturnDocument = ReturnDocument.After
-            };
-            return await _collection.FindOneAndUpdateAsync(filter, update, options);
+            return await _autoIncrementer.CreateWithAutoIncrementId(entity, _collection);
         }
-
         public async Task<IQueryable<ContractInsurancePolicy>> GetAllAsync()
         {
             return _collection.AsQueryable();
