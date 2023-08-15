@@ -3,6 +3,7 @@ using Application.VSInsurancePolicy;
 using Application.Wrappers;
 using Domain.ContractInsurancePolicyEntity;
 using Domain.InsurancePolicyEntity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sureApp.Application.VSCustomer;
 using sureApp.domain.CustomerEntity;
@@ -16,6 +17,8 @@ namespace API.Controllers
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
+    /// 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class InsuranceController : ControllerBase
