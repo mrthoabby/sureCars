@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using sureApp.domain.CoverageFeatureEntity;
 using Domain.InsurancePolicyEntity;
 using sureApp.domain.CustomerEntity;
-using Domain.ContractEntity;
+using Domain.ContractInsurancePolicyEntity;
 
 namespace sureApp.Infrastructure
 {

@@ -4,7 +4,7 @@ using sureApp.Infrastructure;
 
 namespace Infrastructure.ContractInsurancePolicySource
 {
-    internal class ContractInsurancePolicyRepository : Domain.ContractInsurancePolicyEntity.ContractInsurancePolicyRepository
+    internal class ContractInsurancePolicyRepository : Domain.ContractInsurancePolicyEntity.IContractInsurancePolicyRepository
     {
         private readonly IMongoCollection<ContractInsurancePolicy> _collection;
         public ContractInsurancePolicyRepository(ApplicationDbContext context)

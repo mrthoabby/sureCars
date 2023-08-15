@@ -4,9 +4,9 @@ namespace Application.VSContractInsurancePolicy
 {
     public class ContractInsurancePolicyService : IContractInsurancePolicyService
     {
-        private readonly ContractInsurancePolicyRepository _repository;
+        private readonly IContractInsurancePolicyRepository _repository;
 
-        public ContractInsurancePolicyService(ContractInsurancePolicyRepository repository)
+        public ContractInsurancePolicyService(IContractInsurancePolicyRepository repository)
         {
             _repository = repository;
         }
@@ -18,7 +18,7 @@ namespace Application.VSContractInsurancePolicy
 
         public async Task<IQueryable<ContractInsurancePolicy>> GetAllAsync()
         {
-            return _repository.GetAllAsync();
+            return await _repository.GetAllAsync();
         }
     }
 }
