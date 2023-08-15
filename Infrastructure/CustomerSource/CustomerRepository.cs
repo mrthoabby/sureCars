@@ -13,19 +13,19 @@ namespace Infrastructure.CustomerSource
         }
         public async Task<Customer> CreateAsync(Customer entity)
         {
-            var filter = Builders<Customer>.Filter.Empty;
-            var update = Builders<Customer>.Update.CurrentDate(x => x.BirthDate);
-            var options = new FindOneAndUpdateOptions<Customer>
-            {
-                IsUpsert = true,
-                ReturnDocument = ReturnDocument.After
-            };
-            return await _collection.FindOneAndUpdateAsync(filter, update, options);
+            await _collection.InsertOneAsync(entity);
+            return entity;
         }
 
         public async Task<IQueryable<Customer>> GetAllAsync()
         {
             return _collection.AsQueryable();
+        }
+
+        public async Task<Customer> GetByIdAsync(string id)
+        {
+            var data = _collection.AsQueryable().Where(x => x.Id == id);
+            return data.FirstOrDefault();
         }
     }
 }

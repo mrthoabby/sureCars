@@ -20,5 +20,10 @@ namespace sureApp.Application.VSCustomer
         {
             return await _repository.GetAllAsync();
         }
+
+        public async Task<Customer> GetByIdAsync(string id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
     }
 }
