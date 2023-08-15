@@ -2,6 +2,7 @@
 using Application.VSInsurancePolicy;
 using Application.Wrappers;
 using Domain.ContractInsurancePolicyEntity;
+using Domain.InsurancePolicyEntity;
 using Microsoft.AspNetCore.Mvc;
 using sureApp.Application.VSCustomer;
 using sureApp.domain.CustomerEntity;
@@ -11,6 +12,7 @@ namespace API.Controllers
 {
     /// <summary>
     /// No es ideal que un endpoint controller tenga tanto codigo pero me estoy viendo cogido de tiempo y el codigo escalable es mejorable
+    /// Hay codigo repetitivo se debe agrupar a una función pero no lo hago por tiempo
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
@@ -30,84 +32,56 @@ namespace API.Controllers
         [HttpGet("plate/{plate}")] public async Task<IActionResult> Get(string plate)
         {
             
-            var customers = await _customerService.GetAllAsync();
-            var insurances = await _ownService.GetAllAsync();
             var result = await _contractService.GetAllAsync();
-            //if(customers is null && insurances != null)
-            //{
+            var constract = result.FirstOrDefault(x => x.Vehicle.Plate.ToLower() == plate.ToLower());
+            if (constract is null) return BadRequest(new ResponseResult<string>(false, "NOT FOUND", "No data", null));
+            var insurances = await _ownService.GetByIdAsync(constract.InsurancePolicyIdentifier);
+            var customers = await _customerService.GetByIdAsync(constract.CustomerUuid);
 
-            //}
-
-
-            var request = result
-                .Where(contract => contract.Vehicle.Plate == plate)
-                .Join(insurances,
-                contract => contract.InsurancePolicyIdentifier,
-                insurance => insurance.Identifier,
-                (contract, insurance) => new { Contract = contract, Insurance = insurance })
-                .Join(customers,
-                joineds => joineds.Contract.CustomerUuid,
-                customer => customer.Id,
-                (joined, customer) => new 
-                {
-                    PolicyNumberId = joined.Contract.PolicyContractNumber,
-                    CustomerName = customer.Name,
-                    CustomerIdentification = customer.IdentificationNumber,
-                    CustomerBirthDate = customer.BirthDate,
-                    createAt = joined.Contract.CreateAt,
-                    CoverageValues = string.Join("," ,joined.Insurance.FeaturesId),
-                    MaxCoverageMoney = joined.Insurance.MaximunCoverageValue,
-                    PolicyName = joined.Insurance.Name,
-                    ClientCity = customer.HomeTown,
-                    ClientAddress = customer.Address,
-                    VehiclePlate = joined.Contract.Vehicle.Plate,
-                    VehicleModel = joined.Contract.Vehicle.Model,
-                    IsInspectedTheVehicle = joined.Contract.Vehicle.IsItInspected
-                }).FirstOrDefault();
-            if (request is null)
+            return Ok(new InsuranceCreatioResult
             {
-                return BadRequest(new ResponseResult<string>(false, "Not found", null, null));
-            }
-            return Ok(request);
+                PolicyNumberId = constract.Id,
+                CustomerName = customers.Name,
+                CustomerIdentification = customers.IdentificationNumber,
+                CustomerBirthDate = customers.BirthDate,
+                createAt = constract.CreateAt,
+                CoverageValues = string.Join("-", insurances.FeaturesId),
+                MaxCoverageMoney = insurances.MaximunCoverageValue,
+                PolicyName = insurances.Name,
+                ClientCity = customers.HomeTown,
+                ClientAddress = customers.Address,
+                VehiclePlate = constract.Vehicle.Plate,
+                VehicleModel = constract.Vehicle.Model,
+                IsInspectedTheVehicle = constract.Vehicle.IsItInspected
+            });
 
         }
         [HttpGet("policy/{number}")]
-        public async Task<IActionResult> Get(long number)
+        public async Task<IActionResult> Get(int number)
         {
 
-            var customers = await _customerService.GetAllAsync();
-            var insurances = await _ownService.GetAllAsync();
             var result = await _contractService.GetAllAsync();
-            var request = result
-                .Where(contract => contract.PolicyContractNumber == number)
-                .Join(insurances,
-                contract => contract.InsurancePolicyIdentifier,
-                insurance => insurance.Identifier,
-                (contract, insurance) => new { Contract = contract, Insurance = insurance })
-                .Join(customers,
-                joineds => joineds.Contract.CustomerUuid,
-                customer => customer.Id,
-                (joined, customer) => new
-                {
-                    PolicyNumberId = joined.Contract.PolicyContractNumber,
-                    CustomerName = customer.Name,
-                    CustomerIdentification = customer.IdentificationNumber,
-                    CustomerBirthDate = customer.BirthDate,
-                    createAt = joined.Contract.CreateAt,
-                    CoverageValues = string.Join(",", joined.Insurance.FeaturesId),
-                    MaxCoverageMoney = joined.Insurance.MaximunCoverageValue,
-                    PolicyName = joined.Insurance.Name,
-                    ClientCity = customer.HomeTown,
-                    ClientAddress = customer.Address,
-                    VehiclePlate = joined.Contract.Vehicle.Plate,
-                    VehicleModel = joined.Contract.Vehicle.Model,
-                    IsInspectedTheVehicle = joined.Contract.Vehicle.IsItInspected
-                }).FirstOrDefault();
-            if (request is null)
+            var constract = result.FirstOrDefault(x => x.Id == number);
+            if (constract is null) return BadRequest(new ResponseResult<string>(false, "NOT FOUND", null, null));
+            var insurances = await _ownService.GetByIdAsync(constract.InsurancePolicyIdentifier);
+            var customers = await _customerService.GetByIdAsync(constract.CustomerUuid);
+
+            return Ok(new InsuranceCreatioResult
             {
-                return BadRequest(new ResponseResult<string>(false, "Not found", null, null));
-            }
-            return Ok(request);
+                PolicyNumberId = constract.Id,
+                CustomerName = customers.Name,
+                CustomerIdentification = customers.IdentificationNumber,
+                CustomerBirthDate = customers.BirthDate,
+                createAt = constract.CreateAt,
+                CoverageValues = string.Join("-", insurances.FeaturesId),
+                MaxCoverageMoney = insurances.MaximunCoverageValue,
+                PolicyName = insurances.Name,
+                ClientCity = customers.HomeTown,
+                ClientAddress = customers.Address,
+                VehiclePlate = constract.Vehicle.Plate,
+                VehicleModel = constract.Vehicle.Model,
+                IsInspectedTheVehicle = constract.Vehicle.IsItInspected
+            });
 
         }
 
@@ -131,16 +105,14 @@ namespace API.Controllers
             }
             else if (DateTime.Now.ToUniversalTime() > requestedPolice.Validity.To.ToUniversalTime())
             {
-                return BadRequest(new ResponseResult<string>(false, "POLIZA DE SEGURO NO ESTÁ VIGENTE", "null", null));
+                return BadRequest(new ResponseResult<InsurancePolicy>(false, "POLIZA DE SEGURO NO ESTÁ VIGENTE", requestedPolice, null));
             }
-
-            var carToAdd = new Car(request.VehicleLicensePlate, request.VehicleModel, request.VehicleInspected);
 
             var contractToCreate = new ContractInsurancePolicy
             {
                 CreateAt = DateTime.UtcNow,
                 CustomerUuid = customerResult.Id,
-                Vehicle = carToAdd,
+                Vehicle = new Car(request.VehicleLicensePlate, request.VehicleModel, request.VehicleInspected),
                 InsurancePolicyIdentifier = request.PolicyIdentifier,
             };
 
