@@ -5,7 +5,7 @@ namespace Application.VSInsurancePolicy
     public class InsuranceCreatioResult
     {
         [JsonPropertyName("# de poliza")]
-        public long PolicyNumberId { get; set; }
+        public int PolicyNumberId { get; set; }
         [JsonPropertyName("Nombre Cliente")]
         public string CustomerName { get; set; }
         [JsonPropertyName("Identificación del cliente")]
@@ -15,7 +15,7 @@ namespace Application.VSInsurancePolicy
         [JsonPropertyName("Fecha en que se tomó la poliza")]
         public DateTime createAt { get; set; }
         [JsonPropertyName("Coverturas cubiertas por la poliza")]
-        public List<string> CoverageValues { get; set; }
+        public string CoverageValues { get; set; }
         [JsonPropertyName("Valor maximo cubierto por la póliza")]
         public double MaxCoverageMoney { get; set; }
         [JsonPropertyName("Nombre del plan de la póliza")]

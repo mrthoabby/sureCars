@@ -1,13 +1,13 @@
-﻿using sureApp.domain.Interfaces;
+﻿using sureApp.domain.ValueObjects;
 
 namespace Domain.ContractInsurancePolicyEntity
 {
     public class ContractInsurancePolicy
     {
-        public long PolicyContractNumber { get; set; }
+        public int Id { get; set; }
         public string InsurancePolicyIdentifier { get; set; }
         public string CustomerUuid { get; set; }
         public DateTime CreateAt { get; set; }
-        public IVehicle Vehicle { get; set; }
+        public Car Vehicle { get; set; }
     }
 }
